@@ -4,14 +4,16 @@
 
 - [le lien mcd (faudra peut etre creer un compte)](https://dbdiagram.io/d/tenjin-6875d886f413ba3508e07ee5)
 
-## 1. **Organization**
+## 1. **Institute**
 
 ```json
 {
   "_id": ObjectId,
-  "name": String,
+  "business_name": String,
   "siret": String,
   "address": String,
+  "zip_code": String,
+  "city": String,
   "contact_emails": [String],
   "formations": [ObjectId],         // Formations créées/gérées par cet organisme
   "users": [ObjectId],              // Utilisateurs membres de cet organisme

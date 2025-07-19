@@ -192,3 +192,11 @@
 - **Action** : 
   - Vérifie toutes les offres dont la date de début de travail est dépassée
   - Met à jour le statut de ces offres à `expired`
+
+### Event `offer.deleted|archived|expired`
+**Impact sur les ProfileGrant associés**
+- **Déclencheur** : Offre supprimée, archivée ou expirée
+- **Action** :
+  - Suppression automatique des ProfileGrant créés via OfferResponse pour cette offre
+  - Notification aux candidats concernés de la révocation d'accès
+  - Invalidation du cache de permissions ProfileGrant (si il y a)

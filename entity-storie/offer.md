@@ -46,12 +46,12 @@
 > - Date de création
 > - Date d'expiration (modifiable directement)
 > - Date StartDateJob (modifiable directement)
-> - Quizz (oui / non) si "oui" cliquable direction vers le quizz si "non" cliquable pour en créer un
+> - Quiz (oui / non) si "oui" cliquable direction vers le quiz si "non" cliquable pour en créer un
 > - Actions (modifier, supprimer)
 
 > Les détails d'une offre s'affiche sous forme de card, et contient toutes les informations de l'offre
 > - Tous les champs de la struct Offer
-> - la partie "Quizz" contient un lien vers le quizz s'il existe, sinon un lien pour accèder à la création d'un quizz
+> - la partie "Quiz" contient un lien vers le quiz s'il existe, sinon un lien pour accèder à la création d'un quiz
 > - le nombre de jours que l'offre existe (calculé à partir de la date de création)
 > - le nombre de jours avant la date d'expiration (calculé à partir de la date actuelle)
 > - le nombre de jours avant la date de début de travail (calculé à partir de la date actuelle)
@@ -100,7 +100,7 @@
   - Toute les regles de `CreateOffer` 
   - la date d'expiration doit etre supérieure à la date actuelle et à la date de début de travail
   - la date de début de travail doit etre supérieure à la date actuelle et inférieure à la date d'expiration
-  - il sera possible de créé un quizz seulement apres que l'offre soit créée
+  - il sera possible de créé un quiz seulement apres que l'offre soit créée
 - **Body** : DTO `CreateOffer`
 - **Response** : `201` avec l'offre créée
 - **Errors** : `400`, `401`, `403`, `500`
@@ -194,9 +194,21 @@
   - Met à jour le statut de ces offres à `expired`
 
 ### Event `offer.deleted|archived|expired`
-**Impact sur les ProfileGrant associés**
+**Impact sur les ProfileGrant associés et Quiz**
 - **Déclencheur** : Offre supprimée, archivée ou expirée
 - **Action** :
   - Suppression automatique des ProfileGrant créés via OfferResponse pour cette offre
+  - Quiz se referer au fhcier quiz.md
   - Notification aux candidats concernés de la révocation d'accès
+  - Notification aux candidats ayant des soumissions de quiz en cours
   - Invalidation du cache de permissions ProfileGrant (si il y a)
+
+### Event `offer.archived|expired`
+**Impact sur les ProfileGrant associés et Quiz**
+- **Déclencheur** : Offre supprimée, archivée ou expirée
+- **Action** :
+    - Suppression automatique des ProfileGrant créés via OfferResponse pour cette offre
+    - Quiz se referer au fichier quiz.md
+    - Notification aux candidats concernés de la révocation d'accès
+    - Notification aux candidats ayant des soumissions de quiz en cours
+    - Invalidation du cache de permissions ProfileGrant (si il y a)

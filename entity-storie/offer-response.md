@@ -98,6 +98,10 @@
   - L'OfferSent doit exister et être destiné au candidat authentifié
   - L'offre doit être active
   - Le candidat ne peut répondre qu'une seule fois (contrainte unique sur OfferSentID)
+  - **Règles Quiz obligatoire** :
+    - Si l'Offer liée a un QuizID, le candidat DOIT avoir une QuizSubmission avec status="submitted"
+    - Le QuizSubmission.OfferID doit correspondre à l'OfferID de l'OfferSent
+    - Erreur 412 (Precondition Failed) si quiz non complété
   - Si status = `declined`, sharedFields doit être vide
   - Si status = `accepted`, sharedFields peut contenir les valeurs autorisées
   - Les valeurs autorisées pour sharedFields : `email`, `phone`, `cv`, `linkedin`, `github`, `skills`, `experience`, `location`, `identity` (à modifier)
@@ -111,7 +115,7 @@ exemple json :
 }
 ```
 - **Response** : `201` avec la réponse d'offre créée
-- **Errors** : `400`, `401`, `403`, `409` (déjà répondu), `500`
+- **Errors** : `400`, `401`, `403`, `409` (déjà répondu), `412` (quiz non complété), `500`
 
 ### GET /offers/{offerId}/responses
 **Récupération des réponses d'une offre spécifique**
@@ -146,6 +150,7 @@ exemple json :
 - `403 Forbidden` : Permissions insuffisantes
 - `404 Not Found` : Ressource non trouvée
 - `409 Conflict` : Réponse déjà existante pour cet OfferSent
+- `412 Precondition Failed` : Quiz obligatoire non complété
 - `500 Internal Server Error` : Erreur serveur
 
 ## Flows techniques - ÉVÉNEMENTS

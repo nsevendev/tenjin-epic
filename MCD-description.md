@@ -353,28 +353,140 @@
 ```json
 {
   "_id": ObjectId,
-  "recruiter_id": ObjectId,
+  "recruiter_id": ObjectId,            // Pour quiz d'offres
+  "teacher_id": ObjectId,              // Pour quiz de cours
+  "offer_id": ObjectId,                // Lien vers offre (si type="offer")
+  "course_id": ObjectId,               // Lien vers cours (si type="course")
   "title": String,
   "description": String,
+  "type": "offer" | "course",          // Type de quiz
   "questions": [
     {
+      "id": String,                    // ID unique de la question
       "question": String,
       "type": "qcm" | "text" | "file",
-      "choices": [String],              // Si QCM
-      "answer": String
+      "choices": [String],             // Si QCM
+      "answer": String,                // Réponse correcte
+      "points": Number                 // Points pour cette question
     }
   ],
-  "created_at": Date
+  "time_limit": Number,                // Limite de temps en secondes (optionnel)
+  "is_required": Boolean,              // Obligatoire pour les cours
+  "is_active": Boolean,                // Statut d'activation
+  "passing_score": Number,             // Score minimum pour réussir
+  "visibility_passing_score": Boolean, // Afficher le score requis
+  "created_at": Date,
+  "updated_at": Date
 }
 ```
 
 **Description :**
 
-* Peut être attaché à une offre ou envoyé directement à un candidat.
+* **Type "offer"** : Quiz obligatoire lié à une offre. Le candidat DOIT le compléter avant de pouvoir répondre à l'offre.
+* **Type "course"** : Quiz lié à un cours, peut être obligatoire ou optionnel selon `is_required`.
+* Support de trois types de questions : QCM, texte libre, upload de fichier.
+* Système de scoring avec seuil de réussite configurable.
 
 ---
 
-## 14. **JobSkillCatalog (Service, pas collection)**
+## 14. **QuizSession**
+
+```json
+{
+  "_id": ObjectId,
+  "quiz_id": ObjectId,
+  "user_id": ObjectId,
+  "type": "offer" | "course",          // Type de session selon le quiz
+  "answers": [
+    {
+      "question_id": String,
+      "answer": String,
+      "file_url": String               // Pour questions de type "file"
+    }
+  ],
+  "started_at": Date,
+  "finished_at": Date,                 // Date de fin (peut être null)
+  "time_working": Number,              // Temps passé en secondes
+  "time_remaining": Number,            // Temps restant en secondes
+  "status": "started" | "inprogress" | "paused" | "expired" | "completed",
+  "created_at": Date,
+  "updated_at": Date
+}
+```
+
+**Description :**
+
+* Représente une session active de quiz (utilisateur en train de faire le quiz).
+* Gère les réponses temporaires, pause/reprise, et expiration de session.
+* Une seule session active par utilisateur par quiz.
+
+---
+
+## 15. **QuizSubmission**
+
+```json
+{
+  "_id": ObjectId,
+  "quiz_session_id": ObjectId,         // Référence vers la session qui a créé cette soumission
+  "quiz_id": ObjectId,
+  "user_id": ObjectId,
+  "offer_id": ObjectId,                // Si lié à une offre
+  "course_id": ObjectId,               // Si lié à un cours
+  "final_answers": [
+    {
+      "question_id": String,
+      "answer": String,
+      "file_url": String               // Pour questions de type "file"
+    }
+  ],
+  "submitted_at": Date,
+  "score": Number,                     // Score total obtenu
+  "max_score": Number,                 // Score maximum possible
+  "percentage": Number,                // Pourcentage de réussite
+  "passed": Boolean,                   // Quiz réussi ou non
+  "status": "submitted" | "evaluated",
+  "reviewed_by": ObjectId,             // Qui a évalué (pour questions texte/fichier)
+  "reviewed_at": Date,
+  "feedback": String,                  // Commentaires de l'évaluateur
+  "created_at": Date,
+  "updated_at": Date
+}
+```
+
+**Description :**
+
+* Représente la soumission finale d'un quiz complété.
+* Créé automatiquement quand une QuizSession est terminée.
+* Calcul automatique du score pour les QCM, évaluation manuelle possible pour texte/fichier.
+* Pour quiz d'offre : bloque la création d'OfferResponse tant que status != "submitted".
+
+---
+
+## 16. **QuizStats**
+
+```json
+{
+  "_id": ObjectId,
+  "quiz_id": ObjectId,
+  "total_submissions": Number,         // Nombre total de soumissions
+  "total_passed": Number,              // Nombre de réussites
+  "total_failed": Number,              // Nombre d'échecs
+  "average_score": Number,             // Score moyen
+  "average_percentage": Number,        // Pourcentage moyen
+  "average_time_spent": Number,        // Temps moyen en secondes
+  "last_updated": Date
+}
+```
+
+**Description :**
+
+* Statistiques agrégées par quiz, mises à jour automatiquement.
+* Permet aux recruteurs/teachers d'analyser les performances.
+* Statistiques simplifiées sans détail par question.
+
+---
+
+## 17. **JobSkillCatalog (Service, pas collection)**
 
 * **Rôle :** Service indépendant qui synchronise le catalogue officiel France Travail/Pôle Emploi (métiers, fiches métiers, compétences, codes ROME).
 * **Intégration :**
@@ -398,7 +510,9 @@
 * **Course/Session/Formation** ⇄ **Competence** (lié au catalogue France Travail)
 * **User** ⇄ **Competence** (historique, validations multi-orgas/sessions)
 * **Recruiter** ⇄ **Offer** ⇄ **User** (candidature privée, jamais publique)
-* **Recruiter** ⇄ **Quiz** ⇄ **User** (en lien avec offre ou seul)
+* **Recruiter** ⇄ **Quiz** ⇄ **User** (quiz d'offres obligatoires)
+* **Teacher** ⇄ **Quiz** ⇄ **Student** (quiz de cours, obligatoires ou optionnels)
+* **Quiz** ⇄ **QuizSession** ⇄ **QuizSubmission** ⇄ **QuizStats** (sessions actives, soumissions finales et analyses)
 * **Recruiter** ⇄ **ChatRoom** ⇄ **User** (après premier contact positif)
 * **Session** ⇄ **ChatRoom/AttendanceSheet/Calendar** (outils d’organisation)
 

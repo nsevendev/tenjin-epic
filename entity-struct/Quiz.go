@@ -1,10 +1,3 @@
-package entity
-
-import (
-	"time"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-)
-
 // Question d'un quizz
 type Question struct {
 	ID       primitive.ObjectID `bson:"_id" json:"id"`

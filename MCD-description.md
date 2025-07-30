@@ -4,13 +4,15 @@
 
 - [le lien mcd (faudra peut etre creer un compte)](https://dbdiagram.io/d/tenjin-6875d886f413ba3508e07ee5)
 
-## 1. **Institute**
+## 1. **Company**
 
 ```json
 {
   "_id": ObjectId,
   "business_name": String,
   "siret": String,
+  "sector": String,
+  "comp_type": String,
   "address": String,
   "zip_code": String,
   "city": String,
@@ -24,9 +26,9 @@
 
 **Description :**
 
-* Identifie chaque organisme de formation.
-* Contient les liens vers ses formations et utilisateurs.
-* Le SIRET est obligatoire pour assurer la traçabilité légale.
+- Identifie chaque organisme de formation.
+- Contient les liens vers ses formations et utilisateurs.
+- Le SIRET est obligatoire pour assurer la traçabilité légale.
 
 ---
 
@@ -94,15 +96,15 @@
 
 **Description :**
 
-* **Anonymat** : les infos personnelles (hors prénom/nom et compétences) ne sont partagées qu’après consentement.
-* **Compétences** : historique détaillé par compétence et par session/org.
-* **Disponibilités** : pour filtrer facilement les profils côté recruteur.
+- **Anonymat** : les infos personnelles (hors prénom/nom et compétences) ne sont partagées qu’après consentement.
+- **Compétences** : historique détaillé par compétence et par session/org.
+- **Disponibilités** : pour filtrer facilement les profils côté recruteur.
 
 ---
 
 ## 3. **Formation**
 
-*(Liée aux métiers/compétences du catalogue France Travail)*
+_(Liée aux métiers/compétences du catalogue France Travail)_
 
 ```json
 {
@@ -121,8 +123,8 @@
 
 **Description :**
 
-* **external\_job\_ref** : lien vers un métier ou une fiche métier du catalogue officiel France Travail.
-* Permet d'importer ou d’associer des compétences normalisées.
+- **external_job_ref** : lien vers un métier ou une fiche métier du catalogue officiel France Travail.
+- Permet d'importer ou d’associer des compétences normalisées.
 
 ---
 
@@ -151,8 +153,8 @@
 
 **Description :**
 
-* Point central de toutes les fonctionnalités "live" : calendrier, chat, présence, quiz…
-* **course\_ids** : possibilité de personnaliser la structure pour une session donnée.
+- Point central de toutes les fonctionnalités "live" : calendrier, chat, présence, quiz…
+- **course_ids** : possibilité de personnaliser la structure pour une session donnée.
 
 ---
 
@@ -176,8 +178,8 @@
 
 **Description :**
 
-* **Réutilisable** entre plusieurs formations/sessions.
-* Contenus variés : texte, PDF, liens, etc.
+- **Réutilisable** entre plusieurs formations/sessions.
+- Contenus variés : texte, PDF, liens, etc.
 
 ---
 
@@ -196,8 +198,8 @@
 
 **Description :**
 
-* Fichier ou média attachable à un cours ou une session.
-* Permet de partager ou versionner facilement les documents.
+- Fichier ou média attachable à un cours ou une session.
+- Permet de partager ou versionner facilement les documents.
 
 ---
 
@@ -217,8 +219,8 @@
 
 **Description :**
 
-* Peut être importée ou synchronisée avec la base France Travail (ROME/Compétences).
-* **external\_skill\_id** : référence externe pour garder la cohérence nationale.
+- Peut être importée ou synchronisée avec la base France Travail (ROME/Compétences).
+- **external_skill_id** : référence externe pour garder la cohérence nationale.
 
 ---
 
@@ -241,7 +243,7 @@
 
 **Description :**
 
-* Utilisé pour alimenter l’historique de compétences du profil utilisateur.
+- Utilisé pour alimenter l’historique de compétences du profil utilisateur.
 
 ---
 
@@ -265,8 +267,8 @@
 
 **Description :**
 
-* Permet un suivi fin des présences sur la durée de la session.
-* **status** permet de gérer toutes les situations (retard, absence justifiée…).
+- Permet un suivi fin des présences sur la durée de la session.
+- **status** permet de gérer toutes les situations (retard, absence justifiée…).
 
 ---
 
@@ -289,8 +291,8 @@
 
 **Description :**
 
-* Salons d'information, salons privés, discussions modérées, chats recruteur.
-* Les chats privés (recruteur-candidat) sont créés après contact positif et auto-supprimés au bout d’1 mois.
+- Salons d'information, salons privés, discussions modérées, chats recruteur.
+- Les chats privés (recruteur-candidat) sont créés après contact positif et auto-supprimés au bout d’1 mois.
 
 ---
 
@@ -312,8 +314,8 @@
 
 **Description :**
 
-* Entité dédiée aux recruteurs, le SIRET garantit leur légitimité.
-* Permet de tracer recherches et envois d’offres pour audit.
+- Entité dédiée aux recruteurs, le SIRET garantit leur légitimité.
+- Permet de tracer recherches et envois d’offres pour audit.
 
 ---
 
@@ -343,8 +345,8 @@
 
 **Description :**
 
-* Jamais publique, uniquement envoyée aux candidats choisis.
-* Historique de qui a partagé quoi, à quelle date.
+- Jamais publique, uniquement envoyée aux candidats choisis.
+- Historique de qui a partagé quoi, à quelle date.
 
 ---
 
@@ -382,10 +384,10 @@
 
 **Description :**
 
-* **Type "offer"** : Quiz obligatoire lié à une offre. Le candidat DOIT le compléter avant de pouvoir répondre à l'offre.
-* **Type "course"** : Quiz lié à un cours, peut être obligatoire ou optionnel selon `is_required`.
-* Support de trois types de questions : QCM, texte libre, upload de fichier.
-* Système de scoring avec seuil de réussite configurable.
+- **Type "offer"** : Quiz obligatoire lié à une offre. Le candidat DOIT le compléter avant de pouvoir répondre à l'offre.
+- **Type "course"** : Quiz lié à un cours, peut être obligatoire ou optionnel selon `is_required`.
+- Support de trois types de questions : QCM, texte libre, upload de fichier.
+- Système de scoring avec seuil de réussite configurable.
 
 ---
 
@@ -416,9 +418,9 @@
 
 **Description :**
 
-* Représente une session active de quiz (utilisateur en train de faire le quiz).
-* Gère les réponses temporaires, pause/reprise, et expiration de session.
-* Une seule session active par utilisateur par quiz.
+- Représente une session active de quiz (utilisateur en train de faire le quiz).
+- Gère les réponses temporaires, pause/reprise, et expiration de session.
+- Une seule session active par utilisateur par quiz.
 
 ---
 
@@ -455,10 +457,10 @@
 
 **Description :**
 
-* Représente la soumission finale d'un quiz complété.
-* Créé automatiquement quand une QuizSession est terminée.
-* Calcul automatique du score pour les QCM, évaluation manuelle possible pour texte/fichier.
-* Pour quiz d'offre : bloque la création d'OfferResponse tant que status != "submitted".
+- Représente la soumission finale d'un quiz complété.
+- Créé automatiquement quand une QuizSession est terminée.
+- Calcul automatique du score pour les QCM, évaluation manuelle possible pour texte/fichier.
+- Pour quiz d'offre : bloque la création d'OfferResponse tant que status != "submitted".
 
 ---
 
@@ -480,54 +482,56 @@
 
 **Description :**
 
-* Statistiques agrégées par quiz, mises à jour automatiquement.
-* Permet aux recruteurs/teachers d'analyser les performances.
-* Statistiques simplifiées sans détail par question.
+- Statistiques agrégées par quiz, mises à jour automatiquement.
+- Permet aux recruteurs/teachers d'analyser les performances.
+- Statistiques simplifiées sans détail par question.
 
 ---
 
 ## 17. **JobSkillCatalog (Service, pas collection)**
 
-* **Rôle :** Service indépendant qui synchronise le catalogue officiel France Travail/Pôle Emploi (métiers, fiches métiers, compétences, codes ROME).
-* **Intégration :**
+- **Rôle :** Service indépendant qui synchronise le catalogue officiel France Travail/Pôle Emploi (métiers, fiches métiers, compétences, codes ROME).
+- **Intégration :**
 
-    * Chaque formation ou compétence peut référencer un champ `external_job_ref` ou `external_skill_id` pour garder le lien avec le catalogue.
-    * Suggestion automatique de métiers/compétences lors de la création d’une formation.
-* **Fonctionnement :**
+  - Chaque formation ou compétence peut référencer un champ `external_job_ref` ou `external_skill_id` pour garder le lien avec le catalogue.
+  - Suggestion automatique de métiers/compétences lors de la création d’une formation.
 
-    * **Synchronisation quotidienne** pour garder la base à jour.
-    * **Interface d’admin** pour lier/matcher formations et compétences avec le référentiel.
-    * Utilisé comme source de vérité pour la structuration des formations.
+- **Fonctionnement :**
+
+  - **Synchronisation quotidienne** pour garder la base à jour.
+  - **Interface d’admin** pour lier/matcher formations et compétences avec le référentiel.
+  - Utilisé comme source de vérité pour la structuration des formations.
 
 ---
 
 # **Résumé des relations clés**
 
-* **User** ⇄ **Organization** (appartenance, rôles)
-* **User** ⇄ **Session** (participation, évaluation, présence, chat)
-* **Session** ⇄ **Formation** (instance, personnalisation possible)
-* **Session** ⇄ **Course** (cours planifiés, évalués, enrichis)
-* **Course/Session/Formation** ⇄ **Competence** (lié au catalogue France Travail)
-* **User** ⇄ **Competence** (historique, validations multi-orgas/sessions)
-* **Recruiter** ⇄ **Offer** ⇄ **User** (candidature privée, jamais publique)
-* **Recruiter** ⇄ **Quiz** ⇄ **User** (quiz d'offres obligatoires)
-* **Teacher** ⇄ **Quiz** ⇄ **Student** (quiz de cours, obligatoires ou optionnels)
-* **Quiz** ⇄ **QuizSession** ⇄ **QuizSubmission** ⇄ **QuizStats** (sessions actives, soumissions finales et analyses)
-* **Recruiter** ⇄ **ChatRoom** ⇄ **User** (après premier contact positif)
-* **Session** ⇄ **ChatRoom/AttendanceSheet/Calendar** (outils d’organisation)
+- **User** ⇄ **Organization** (appartenance, rôles)
+- **User** ⇄ **Session** (participation, évaluation, présence, chat)
+- **Session** ⇄ **Formation** (instance, personnalisation possible)
+- **Session** ⇄ **Course** (cours planifiés, évalués, enrichis)
+- **Course/Session/Formation** ⇄ **Competence** (lié au catalogue France Travail)
+- **User** ⇄ **Competence** (historique, validations multi-orgas/sessions)
+- **Recruiter** ⇄ **Offer** ⇄ **User** (candidature privée, jamais publique)
+- **Recruiter** ⇄ **Quiz** ⇄ **User** (quiz d'offres obligatoires)
+- **Teacher** ⇄ **Quiz** ⇄ **Student** (quiz de cours, obligatoires ou optionnels)
+- **Quiz** ⇄ **QuizSession** ⇄ **QuizSubmission** ⇄ **QuizStats** (sessions actives, soumissions finales et analyses)
+- **Recruiter** ⇄ **ChatRoom** ⇄ **User** (après premier contact positif)
+- **Session** ⇄ **ChatRoom/AttendanceSheet/Calendar** (outils d’organisation)
 
 ---
 
 # **Intégration France Travail / JobSkillCatalog**
 
-* **Service indépendant :**
+- **Service indépendant :**
 
-    * Expose des endpoints pour rechercher/importer métiers, fiches métiers, compétences officielles.
-    * Permet d’associer une formation ou compétence à un métier/compétence officielle (ex : code ROME).
-    * Propose automatiquement la liste officielle lors de la création ou la modification d’une formation.
-* **Avantages :**
+  - Expose des endpoints pour rechercher/importer métiers, fiches métiers, compétences officielles.
+  - Permet d’associer une formation ou compétence à un métier/compétence officielle (ex : code ROME).
+  - Propose automatiquement la liste officielle lors de la création ou la modification d’une formation.
 
-    * Les formations et compétences sont toujours alignées avec les standards nationaux.
-    * Le carnet de compétences utilisateur est valorisable dans tous les contextes officiels.
+- **Avantages :**
+
+  - Les formations et compétences sont toujours alignées avec les standards nationaux.
+  - Le carnet de compétences utilisateur est valorisable dans tous les contextes officiels.
 
 ---
